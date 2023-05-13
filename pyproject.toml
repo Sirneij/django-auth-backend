@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "django-auth-backend"
+version = "0.1.0"
+description = "A session-based authentication system with Django"
+authors = ["John Idogun <sirneij@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "django_auth_backend" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "4.2"
+django-redis = "5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
