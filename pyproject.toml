@@ -14,7 +14,9 @@ Pillow = "9.5"          # For images
 psycopg2-binary = "2.9" # For postgres database connection
 celery = "5.2"          # For asynchronous task
 python-decouple = "3.8" # Reading environment variables
-argon2-cffi = "21.3"
+argon2-cffi = "21.3"    # To user argon2 for password hashing
+django-storage = "1.13" # To set default storage to S3
+boto3 = "1.26"          # AWS API SDK
 
 [build-system]
 requires = ["poetry-core"]

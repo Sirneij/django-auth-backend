@@ -1,37 +1,21 @@
 import json
 from typing import Any
 
-from asgiref.sync import sync_to_async
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, JsonResponse
-from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 
 from users.models import UserProfile
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class LoginPageView(View):
-    async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
-        data = json.loads(request.body.decode("utf-8"))
-        email = data.get('email')
-        password = data.get('password')
+class CurrentUserView(View, LoginRequiredMixin):
+    def get(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+        if not request.user.is_authenticated:
+            return JsonResponse(
+                {'error': 'You are not logged in. Kindly ensure you are logged in and try again'}, status=401
+            )
 
-        if email is None or password is None:
-            return JsonResponse({'error': 'Please provide email and password'}, status=400)
-
-        user = await sync_to_async(authenticate)(
-            email=data['email'],
-            password=data['password'],
-        )
-
-        if user is None:
-            return JsonResponse({'error': 'Invalid credentials'}, status=400)
-
-        await sync_to_async(login)(request, user)
-
-        user_details = await UserProfile.objects.filter(user=user).select_related('user').aget()
+        user_details = UserProfile.objects.filter(user=request.user).select_related('user').get()
 
         res_data = {
             'id': str(user_details.user.pk),

@@ -1,6 +1,14 @@
 from django.urls import path
 
-from users.views import confirm, login, logout, regenerate, register
+from users.views import (
+    confirm,
+    current_user,
+    login,
+    logout,
+    profile_update,
+    regenerate,
+    register,
+)
 from users.views.password import change_password, confirm_change_request, request_change
 
 app_name = 'users'
@@ -26,4 +34,7 @@ urlpatterns = [
         change_password.ChangePasswordView.as_view(),
         name='change_password',
     ),
+    # User
+    path('current-user/', current_user.CurrentUserView.as_view(), name='current_user'),
+    path('update-user/', profile_update.UserUpdateView.as_view(), name='profile_update'),
 ]
