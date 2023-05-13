@@ -77,9 +77,13 @@ WSGI_APPLICATION = 'django_auth.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django_auth_backend_db',
+        'USER': 'quickcheck',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': 5432,
+    },
 }
 
 
@@ -138,3 +142,6 @@ CACHES = {
 # Session
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
+
+# User model
+AUTH_USER_MODEL = 'users.User'

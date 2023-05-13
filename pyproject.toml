@@ -10,6 +10,8 @@ packages = [{ include = "django_auth_backend" }]
 python = "^3.11"
 django = "4.2"
 django-redis = "5.2"
+Pillow = "9.5"
+psycopg2-binary = "2.9"
 
 
 [build-system]
