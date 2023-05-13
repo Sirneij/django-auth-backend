@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from decouple import Csv, config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-zt$)wab#-u1)frduzwlq-)yqse^a%5guk7kq%^-h(v(xdlfm&h'
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-zt$)wab#-u1)frduzwlq-)yqse^a%5guk7kq%^-h(v(xdlfm&h')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+
+FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:3000')
 
 
 # Application definition
@@ -56,7 +61,7 @@ ROOT_URLCONF = 'django_auth.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,7 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'LOCATION': config('REDIS_URL', default=''),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         },
@@ -142,6 +147,36 @@ CACHES = {
 # Session
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
 
 # User model
 AUTH_USER_MODEL = 'users.User'
+
+# Celery
+CELERY_BROKER_URL = config('REDIS_URL', default='')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Enail configuration
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = config('APP_EMAIL__HOST_USER', default='')
+    EMAIL_HOST_PASSWORD = config('APP_EMAIL__HOST_USER_PASSWORD', default='')
+    EMAIL_FROM = 'Authentication System - Django Backend'
+
+DEFAULT_FROM_EMAIL = config('APP_EMAIL__HOST_USER', default='')
+
+ADMINS = (('Admin', config('APP_EMAIL__HOST_USER', default='')),)
+
+# For token generation
+PASSWORD_RESET_TIMEOUT = config('TOKEN_EXPIRATION', default=10 * 60, cast=int)

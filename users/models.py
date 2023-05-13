@@ -40,9 +40,6 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(db_index=True, unique=True)
     thumbnail = models.ImageField(upload_to='users/', null=True)
-    phone_number = models.CharField(max_length=20, null=True)
-    github_link = models.CharField(max_length=20000, null=True)
-    birth_date = models.DateField(null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -55,3 +52,18 @@ class User(AbstractUser):
         """Return a string representation of this `User`."""
         string = self.email if self.email != '' else self.get_full_name()
         return f'{self.id} {string}'
+
+
+class UserProfile(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=20, null=True)
+    github_link = models.CharField(max_length=20000, null=True)
+    birth_date = models.DateField(null=True)
+
+    class Meta:
+        db_table = 'user_profile'
+
+    def __str__(self):
+        string = self.user.email if self.user.email != '' else self.user.get_full_name()
+        return f'<UserProfile {self.id} {string}>'

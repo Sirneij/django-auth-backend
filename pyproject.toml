@@ -9,10 +9,11 @@ packages = [{ include = "django_auth_backend" }]
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "4.2"
-django-redis = "5.2"
-Pillow = "9.5"
-psycopg2-binary = "2.9"
-
+django-redis = "5.2"    # redis
+Pillow = "9.5"          # For images
+psycopg2-binary = "2.9" # For postgres database connection
+celery = "5.2"          # For asynchronous task
+python-decouple = '3.8' # Reading environment variables
 
 [build-system]
 requires = ["poetry-core"]

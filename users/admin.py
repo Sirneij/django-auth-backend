@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from users.models import User
+from users.models import User, UserProfile
 
 
 class CustomUserAdmin(UserAdmin):
@@ -28,3 +28,12 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(User, CustomUserAdmin)
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user_email', 'phone_number', 'github_link', 'birth_date')
+
+    @admin.display(ordering="user__email")
+    def user_email(self, obj: UserProfile) -> str:
+        return obj.user.email
