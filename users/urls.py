@@ -1,6 +1,7 @@
 from django.urls import path
 
 from users.views import confirm, login, logout, regenerate, register
+from users.views.password import change_password, confirm_change_request, request_change
 
 app_name = 'users'
 urlpatterns = [
@@ -9,4 +10,20 @@ urlpatterns = [
     path('regenerate-token/', regenerate.RegenerateTokenView.as_view(), name='regenerate'),
     path('login/', login.LoginPageView.as_view(), name='login'),
     path('logout/', logout.LogoutView.as_view(), name='logout'),
+    # Password change
+    path(
+        'password-change/request-password-change/',
+        request_change.RequestPasswordChangeView.as_view(),
+        name='request_password_change',
+    ),
+    path(
+        'password-change/confirm/change-password/<uidb64>/<token>/',
+        confirm_change_request.ConfirmPasswordChangeRequestView.as_view(),
+        name='confirm_password_change_request',
+    ),
+    path(
+        'password-change/change-user-password/',
+        change_password.ChangePasswordView.as_view(),
+        name='change_password',
+    ),
 ]

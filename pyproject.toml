@@ -13,7 +13,8 @@ django-redis = "5.2"    # redis
 Pillow = "9.5"          # For images
 psycopg2-binary = "2.9" # For postgres database connection
 celery = "5.2"          # For asynchronous task
-python-decouple = '3.8' # Reading environment variables
+python-decouple = "3.8" # Reading environment variables
+argon2-cffi = "21.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -21,7 +21,7 @@ from users.utils import validate_email
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class RegenerateTokenView(View):
+class RequestPasswordChangeView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
@@ -34,11 +34,11 @@ class RegenerateTokenView(View):
             return JsonResponse({'error': error_text}, status=400)
 
         try:
-            user = await get_user_model().objects.filter(email=email, is_active=False).aget()
+            user = await get_user_model().objects.filter(email=email, is_active=True).aget()
         except get_user_model().DoesNotExist:
             return JsonResponse(
                 {
-                    'error': "A user with this e-mail address does not exist. If you registered with this email, ensure you haven't activated it yet. You can check by logging in"
+                    'error': f'An active user with this e-mail address does not exist. If you registered with this email, ensure you have activated your account. You can check by logging in. If you have not activated it, visit {settings.FRONTEND_URL}/auth/regenerate-token to regenerate the token that will allow you activate your account.'
                 },
                 status=404,
             )
@@ -46,11 +46,11 @@ class RegenerateTokenView(View):
         token = await sync_to_async(account_activation_token.make_token)(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}"
+        confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})}"
 
-        subject = 'Please, verify your account'
+        subject = 'Password reset instructions'
         ctx = {
-            'title': "(Django) RustAuth - Let's get you verified",
+            'title': "(Django) RustAuth - Password Reset Instructions",
             'domain': settings.FRONTEND_URL,
             'confirmation_link': confirmation_link,
             'expiration_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).minute,
@@ -61,14 +61,14 @@ class RegenerateTokenView(View):
 
         send_email_message.delay(
             subject=subject,
-            template_name='verification_email.html',
+            template_name='password_reset_email.html',
             user_id=user.id,
             ctx=ctx,
         )
 
         return JsonResponse(
             {
-                'message': 'Account activation link has been sent to your email address. Kindly take action before its expiration'
+                'message': 'Password reset instructions have been sent to your email address. Kindly take action before its expiration'
             },
             status=200,
         )

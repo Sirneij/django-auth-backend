@@ -58,11 +58,12 @@ class RegisterView(View):
 
         confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}"
 
-        subject = "Please, verify your account"
+        subject = 'Please, verify your account'
         ctx = {
             'title': "(Django) RustAuth - Let's get you verified",
             'domain': settings.FRONTEND_URL,
             'confirmation_link': confirmation_link,
+            'expiration_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).minute,
             'exact_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).strftime(
                 '%A %B %d, %Y at %r'
             ),
