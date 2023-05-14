@@ -24,6 +24,7 @@ click-option-group==0.5.5
 click-plugins==1.1.1
 click-repl==0.2.0
 colorama==0.4.6
+coverage==7.2.5
 decorator==5.1.1
 defusedxml==0.7.1
 dill==0.3.6
@@ -33,8 +34,11 @@ django-storages==1.13.2
 django-stubs==4.2.0
 django-stubs-ext==4.2.0
 dodgy==0.2.1
+execnet==1.9.0
 executing==1.2.0
 face==22.0.0
+factory-boy==3.2.1
+Faker==18.7.0
 flake8==5.0.4
 flake8-polyfill==1.0.2
 gitdb==4.0.10
@@ -82,7 +86,9 @@ pylint-flask==0.6
 pylint-plugin-utils==0.7
 pyrsistent==0.19.3
 pytest==7.3.1
+pytest-cov==4.0.0
 pytest-django==4.5.2
+pytest-xdist==3.3.0
 python-dateutil==2.8.2
 python-decouple==3.8
 python-lsp-jsonrpc==1.0.0

@@ -40,4 +40,4 @@ class UserProfileAdmin(admin.ModelAdmin):  # type:ignore
     @admin.display(ordering="user__email")
     def user_email(self, obj: UserProfile) -> str:
         """Return the user's email."""
-        return obj.user.email
+        return obj.user.email  # pragma: no cover
