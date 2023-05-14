@@ -14,6 +14,7 @@ from users.models import UserProfile
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginPageView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+        """Handle user logins."""
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
         password = data.get('password')

@@ -23,6 +23,7 @@ from users.utils import validate_email
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+        """Register users."""
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
         first_name = data.get('first_name')
@@ -56,7 +57,10 @@ class RegisterView(View):
         token = await sync_to_async(account_activation_token.make_token)(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}"
+        confirmation_link = (
+            f"{request.scheme}://{get_current_site(request)}"
+            f"{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}",
+        )
 
         subject = 'Please, verify your account'
         ctx = {
@@ -78,7 +82,10 @@ class RegisterView(View):
 
         return JsonResponse(
             {
-                'message': 'Your account was created successfully. Check your email address to activate your account as we just sent you an activation link. Ensure you activate your account before the link expires'
+                'message': 'Your account was created successfully. '
+                'Check your email address to activate your account as we '
+                'just sent you an activation link. Ensure you activate your '
+                'account before the link expires'
             },
             status=201,
         )

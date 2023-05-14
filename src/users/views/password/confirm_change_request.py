@@ -11,6 +11,7 @@ from users.token import account_activation_token
 
 class ConfirmPasswordChangeRequestView(View):
     async def get(self, request: HttpRequest, uidb64: str, token: str) -> HttpResponseRedirect:
+        """Confirm password change requests."""
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = await get_user_model().objects.aget(pk=uid)
@@ -25,5 +26,6 @@ class ConfirmPasswordChangeRequestView(View):
             return HttpResponseRedirect(f'{settings.FRONTEND_URL}/auth/password/change-password?token={combined}')
 
         return HttpResponseRedirect(
-            f'{settings.FRONTEND_URL}/auth/regenerate-token?reason=It appears that your confirmation token has expired or previously used. Kindly generate a new token',
+            f'{settings.FRONTEND_URL}/auth/regenerate-token?reason=It appears that '
+            'your confirmation token has expired or previously used. Kindly generate a new token',
         )

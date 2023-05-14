@@ -10,6 +10,7 @@ from users.token import account_activation_token
 
 class ConfirmEmailView(View):
     async def get(self, request: HttpRequest, uidb64: str, token: str) -> HttpResponseRedirect:
+        """Confirm and activate user emails and accounts."""
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = await get_user_model().objects.aget(pk=uid)
@@ -22,5 +23,6 @@ class ConfirmEmailView(View):
             return HttpResponseRedirect(f'{settings.FRONTEND_URL}/auth/confirmed')
 
         return HttpResponseRedirect(
-            f'{settings.FRONTEND_URL}/auth/regenerate-token?reason=It appears that your confirmation token has expired or previously used. Kindly generate a new token',
+            f'{settings.FRONTEND_URL}/auth/regenerate-token?reason=It appears that'
+            'your confirmation token has expired or previously used. Kindly generate a new token',
         )

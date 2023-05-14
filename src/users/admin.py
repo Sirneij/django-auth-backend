@@ -34,9 +34,10 @@ admin.site.register(User, CustomUserAdmin)
 
 
 @admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
+class UserProfileAdmin(admin.ModelAdmin):  # type:ignore
     list_display = ('user_email', 'phone_number', 'github_link', 'birth_date')
 
     @admin.display(ordering="user__email")
     def user_email(self, obj: UserProfile) -> str:
+        """Return the user's email."""
         return obj.user.email

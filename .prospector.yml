@@ -1,0 +1,70 @@
+inherits:
+  - strictness_veryhigh
+
+uses:
+  - django
+  - celery
+
+ignore-patterns:
+  - ^setup.py$
+  - wsgi.py$
+  - ^static
+
+pylint:
+  disable:
+    - too-few-public-methods
+    - too-many-ancestors
+    - inherit-non-class
+    - W0613
+    - W0142
+    - R0201
+
+  options:
+    max-locals: 25
+    max-returns: 6
+    max-branches: 20
+    max-statements: 60
+    min-public-methods: 1
+    max-public-methods: 24
+    max-line-length: 120
+    max-args: 10
+    max-module-lines: 1200
+    max-attributes: 8
+    argument-rgx: "[a-z_][a-z0-9_]{2,60}$"
+    attr-rgx: "[a-z_][a-z0-9_]{2,60}$"
+    function-rgx: "[a-z_][a-z0-9_]{2,60}$"
+    method-rgx: "[a-z_][a-z0-9_]{2,60}$"
+    variable-rgx: "[a-z_][a-z0-9_]{2,60}$"
+
+pep8:
+  options:
+    max-line-length: 120
+  disable:
+    - E402
+
+pyroma:
+  disable:
+    - PYR15
+    - PYR18
+    - PYR17
+
+pep257:
+  run: true
+  disable:
+    - D100
+    - D101
+    - D104
+    - D106
+    - D202
+    - D203
+    - D212
+
+mccabe:
+  options:
+    max-complexity: 20
+
+dodgy:
+  run: false
+
+pyflakes:
+  run: false

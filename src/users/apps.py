@@ -6,4 +6,5 @@ class UsersConfig(AppConfig):
     name = 'users'
 
     def ready(self) -> None:
+        """Get the signals."""
         import users.signals

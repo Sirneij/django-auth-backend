@@ -5,14 +5,11 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
 
-class UserManager(BaseUserManager):  # type: ignore
+class UserManager(BaseUserManager):  # type:ignore
     """UserManager class."""
 
-    # type: ignore
-    def create_user(self, email: str, password: str, **extra_fields: dict[str, Any]):
-        """
-        Create and save a User with the given email and password.
-        """
+    def create_user(self, email: str, password: str, **extra_fields: dict[str, Any]) -> AbstractUser:
+        """Create and save a User with the given email and password."""
         if not email:
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
@@ -21,7 +18,7 @@ class UserManager(BaseUserManager):  # type: ignore
         user.save()
         return user
 
-    def create_superuser(self, email: str, password: str, **extra_fields: dict[str, Any]) -> 'User':  # type: ignore
+    def create_superuser(self, email: str, password: str, **extra_fields: dict[str, Any]) -> AbstractUser:
         """Create and return a `User` with superuser (admin) permissions."""
         if password is None:
             raise TypeError('Superusers must have a password.')
@@ -37,7 +34,7 @@ class UserManager(BaseUserManager):  # type: ignore
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = None
+    username = None  # type:ignore
     email = models.EmailField(db_index=True, unique=True)
     thumbnail = models.ImageField(upload_to='users/', null=True)
 
@@ -46,10 +43,10 @@ class User(AbstractUser):
 
     # Tells Django that the UserManager class defined above should manage
     # objects of this type.
-    objects = UserManager()
+    objects = UserManager()  # type:ignore
 
     def __str__(self) -> str:
-        """Return a string representation of this `User`."""
+        """Return a string representation of this User."""
         string = self.email if self.email != '' else self.get_full_name()
         return f'{self.id} {string}'
 
@@ -64,6 +61,7 @@ class UserProfile(models.Model):
     class Meta:
         db_table = 'user_profile'
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Return a string representation of this UserProfile."""
         string = self.user.email if self.user.email != '' else self.user.get_full_name()
         return f'<UserProfile {self.id} {string}>'

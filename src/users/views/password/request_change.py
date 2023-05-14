@@ -23,6 +23,7 @@ from users.utils import validate_email
 @method_decorator(csrf_exempt, name='dispatch')
 class RequestPasswordChangeView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+        """Request user password change."""
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
 
@@ -38,7 +39,11 @@ class RequestPasswordChangeView(View):
         except get_user_model().DoesNotExist:
             return JsonResponse(
                 {
-                    'error': f'An active user with this e-mail address does not exist. If you registered with this email, ensure you have activated your account. You can check by logging in. If you have not activated it, visit {settings.FRONTEND_URL}/auth/regenerate-token to regenerate the token that will allow you activate your account.'
+                    'error': 'An active user with this e-mail address does not exist. '
+                    'If you registered with this email, ensure you have activated your account. '
+                    'You can check by logging in. If you have not activated it, '
+                    f'visit {settings.FRONTEND_URL}/auth/regenerate-token to '
+                    'regenerate the token that will allow you activate your account.'
                 },
                 status=404,
             )
@@ -46,7 +51,10 @@ class RequestPasswordChangeView(View):
         token = await sync_to_async(account_activation_token.make_token)(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})}"
+        confirmation_link = (
+            f"{request.scheme}://{get_current_site(request)}"
+            f"{reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})}",
+        )
 
         subject = 'Password reset instructions'
         ctx = {
@@ -68,7 +76,8 @@ class RequestPasswordChangeView(View):
 
         return JsonResponse(
             {
-                'message': 'Password reset instructions have been sent to your email address. Kindly take action before its expiration'
+                'message': 'Password reset instructions have been sent to your email address. '
+                'Kindly take action before its expiration'
             },
             status=200,
         )

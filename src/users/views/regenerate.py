@@ -23,6 +23,7 @@ from users.utils import validate_email
 @method_decorator(csrf_exempt, name='dispatch')
 class RegenerateTokenView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+        """Regenerate tokens to unverified users."""
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
 
@@ -38,7 +39,9 @@ class RegenerateTokenView(View):
         except get_user_model().DoesNotExist:
             return JsonResponse(
                 {
-                    'error': "A user with this e-mail address does not exist. If you registered with this email, ensure you haven't activated it yet. You can check by logging in"
+                    'error': "A user with this e-mail address does not exist. "
+                    "If you registered with this email, ensure you haven't activated it yet. "
+                    "You can check by logging in"
                 },
                 status=404,
             )
@@ -46,7 +49,10 @@ class RegenerateTokenView(View):
         token = await sync_to_async(account_activation_token.make_token)(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-        confirmation_link = f"{request.scheme}://{get_current_site(request)}{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}"
+        confirmation_link = (
+            f"{request.scheme}://{get_current_site(request)}"
+            f"{reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})}",
+        )
 
         subject = 'Please, verify your account'
         ctx = {
@@ -68,7 +74,8 @@ class RegenerateTokenView(View):
 
         return JsonResponse(
             {
-                'message': 'Account activation link has been sent to your email address. Kindly take action before its expiration'
+                'message': 'Account activation link has been sent to your email address. '
+                'Kindly take action before its expiration'
             },
             status=200,
         )
