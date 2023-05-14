@@ -17,11 +17,11 @@ class CustomUserAdmin(UserAdmin):
         'is_active',
     )
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email', 'password', 'thumbnail')}),
         ('Permissions', {'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (
-        (None, {'classes': ('wide',), 'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}),
+        (None, {'classes': ('wide',), 'fields': ('email', 'password1', 'password2', 'thumbnail', 'is_staff', 'is_active')}),
     )
     search_fields = ('email',)
     ordering = ('email',)

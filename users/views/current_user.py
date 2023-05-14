@@ -25,7 +25,7 @@ class CurrentUserView(View, LoginRequiredMixin):
             'is_staff': user_details.user.is_staff,
             'is_active': user_details.user.is_active,
             'date_joined': str(user_details.user.date_joined),
-            'thumbnail': user_details.user.thumbnail.url() if user_details.user.thumbnail else None,
+            'thumbnail': user_details.user.thumbnail.url if user_details.user.thumbnail else None,
             'profile': {
                 'id': str(user_details.id),
                 'user_id': str(user_details.user.pk),
