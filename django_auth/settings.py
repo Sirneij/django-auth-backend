@@ -183,7 +183,7 @@ DEFAULT_FROM_EMAIL = config('APP_EMAIL__HOST_USER', default='')
 ADMINS = (('Admin', config('APP_EMAIL__HOST_USER', default='')),)
 
 # For token generation
-PASSWORD_RESET_TIMEOUT = config('TOKEN_EXPIRATION', default=10 * 60, cast=int)
+PASSWORD_RESET_TIMEOUT = config('TOKEN_EXPIRATION', default=600, cast=int)
 
 # AWS
 
