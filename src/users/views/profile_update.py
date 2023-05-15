@@ -1,4 +1,5 @@
 import json
+from io import BytesIO
 from typing import Any
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -19,7 +20,9 @@ class UserUpdateView(View, LoginRequiredMixin):
             return JsonResponse(
                 {'error': 'You are not logged in. Kindly ensure you are logged in and try again'}, status=401
             )
-        data, files = MultiPartParser(request.META, request, request.upload_handlers).parse()
+        data, files = MultiPartParser(
+            request.META, BytesIO(request.body), request.upload_handlers, request.encoding
+        ).parse()
 
         first_name = data.get('first_name')
         last_name = data.get('last_name')

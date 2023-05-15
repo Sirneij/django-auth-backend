@@ -2,6 +2,7 @@ import pytest
 from django.test import TestCase
 from factory.django import DjangoModelFactory
 
+from django_auth.test_settings import common_settings
 from users.models import User, UserProfile
 
 
@@ -21,6 +22,7 @@ class UserProfileFactory(DjangoModelFactory):
         django_get_or_create = ('user',)
 
 
+@common_settings
 class UserModelTests(TestCase):
     def setUp(self):
         """Test Setup."""
@@ -31,6 +33,7 @@ class UserModelTests(TestCase):
         self.assertEqual(str(self.user), f'{self.user.id} {self.user.email}')
 
 
+@common_settings
 class UserProfileModelTests(TestCase):
     def setUp(self):
         """Test Setup."""

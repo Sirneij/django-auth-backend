@@ -9,25 +9,25 @@ from users.token import account_activation_token
 
 
 @common_settings
-class ConfirmViewTests(TestCase):
+class ConfirmPasswordChangeRequestViewTests(TestCase):
     def setUp(self) -> None:
         """Set up."""
         self.client = Client()
 
-    def test_user_failure_is_active(self):
-        """Test when user is already active."""
+    def test_confirm_password_change_request_success(self):
+        """Test when user is active."""
         user = UserFactory.create(email='john@example.com')
 
         token = account_activation_token.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.id))
 
-        url = reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})
+        url = reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})
 
         response = self.client.get(url, follow=True)
-        self.assertEqual(response.request['PATH_INFO'], '/auth/regenerate-token')
+        self.assertEqual(response.request['PATH_INFO'], '/auth/password/change-password')
 
-    def test_user_is_available(self):
-        """Test when user is available."""
+    def test_confirm_password_change_request_failure(self):
+        """Test when user is inactive."""
         user = UserFactory.create(email='john@example.com')
         user.is_active = False
         user.save()
@@ -35,10 +35,7 @@ class ConfirmViewTests(TestCase):
         token = account_activation_token.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.id))
 
-        url = reverse('users:confirm', kwargs={'uidb64': uid, 'token': token})
+        url = reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})
 
         response = self.client.get(url, follow=True)
-        self.assertEqual(response.request['PATH_INFO'], '/auth/confirmed')
-
-        user.refresh_from_db()
-        self.assertTrue(user.is_active)
+        self.assertEqual(response.request['PATH_INFO'], '/auth/regenerate-token')

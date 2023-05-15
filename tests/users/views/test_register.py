@@ -3,9 +3,11 @@ from unittest.mock import patch
 from django.test import Client, TestCase
 from django.urls import reverse
 
+from django_auth.test_settings import common_settings
 from tests.users.test_models import UserFactory
 
 
+@common_settings
 class RegisterViewTests(TestCase):
     def setUp(self) -> None:
         """Set up."""

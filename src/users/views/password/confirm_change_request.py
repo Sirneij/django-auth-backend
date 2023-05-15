@@ -14,7 +14,7 @@ class ConfirmPasswordChangeRequestView(View):
         """Confirm password change requests."""
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
-            user = await get_user_model().objects.aget(pk=uid)
+            user = await get_user_model().objects.aget(pk=uid, is_active=True)
         except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist):
             user = None
 

@@ -197,7 +197,10 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_STORAGE_REGION}.amazo
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 PUBLIC_MEDIA_LOCATION = 'media/users/django-auth'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-DEFAULT_FILE_STORAGE = 'django_auth.storage_backends.PublicMediaStorage'
-
+STORAGES = {
+    'default': {
+        'BACKEND': 'django_auth.storage_backends.PublicMediaStorage',
+    },
+}
 
 STATIC_URL = 'static/'

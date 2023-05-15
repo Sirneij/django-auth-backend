@@ -31,6 +31,7 @@ class RegenerateTokenView(View):
             return JsonResponse({'error': 'Email field is empty'}, status=400)
 
         is_valid, error_text = validate_email(email)
+
         if not is_valid:
             return JsonResponse({'error': error_text}, status=400)
 

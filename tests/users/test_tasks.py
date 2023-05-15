@@ -1,14 +1,14 @@
 from unittest.mock import patch
 
 from django.test import TestCase
-from django.test.utils import override_settings
 
+from django_auth.test_settings import common_settings
 from tests.users.test_models import UserFactory
 from users.tasks import send_email_message
 
 
+@common_settings
 class SendMessageTests(TestCase):
-    @override_settings(DEFAULT_FROM_EMAIL='admin@example.com')
     @patch('users.tasks.send_mail')
     def test_success(self, send_mail):
         user = UserFactory.create(email='john@example.com')

@@ -24,7 +24,7 @@ from users.utils import validate_email
 class RegisterView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
         """Register users."""
-        data = json.loads(request.body.decode("utf-8"))
+        data = json.loads(request.body.decode('utf-8'))
         email = data.get('email')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
