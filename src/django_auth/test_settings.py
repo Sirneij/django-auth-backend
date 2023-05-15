@@ -3,7 +3,7 @@ from django.test import override_settings
 common_settings = override_settings(
     STORAGES={
         'default': {
-            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+            'BACKEND': 'django.core.files.storage.InMemoryStorage',
         },
     },
     DEFAULT_FROM_EMAIL='admin@example.com',
