@@ -9,6 +9,7 @@ ignore-patterns:
   - ^setup.py$
   - wsgi.py$
   - ^static
+  - (^|/)migrations(/|$)
 
 pylint:
   disable:
@@ -38,7 +39,7 @@ pylint:
 
 pep8:
   options:
-    max-line-length: 120
+    max-line-length: 140
   disable:
     - E402
 
