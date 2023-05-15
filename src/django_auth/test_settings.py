@@ -7,5 +7,7 @@ common_settings = override_settings(
         },
     },
     DEFAULT_FROM_EMAIL='admin@example.com',
-    PASSWORD_HASHERS=('django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',),
+    PASSWORD_HASHERS=[
+        'django.contrib.auth.hashers.MD5PasswordHasher',
+    ],
 )
