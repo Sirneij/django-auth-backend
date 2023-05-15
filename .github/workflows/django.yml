@@ -2,30 +2,41 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.9, 3.10, 3.11]
+        python-version: [3.9, 3.11]
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements_dev.txt
-    - name: Run static analysis
-      run: ./scripts/static_validation.sh
-    - name: Run tests
-      run: ./scripts/test.sh
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements_dev.txt
+      - name: Run static analysis
+        run: chmod +x ./scripts/static_validation.sh && ./scripts/static_validation.sh
+      - name: Run tests
+        run: chmod +x ./scripts/test.sh && ./scripts/test.sh

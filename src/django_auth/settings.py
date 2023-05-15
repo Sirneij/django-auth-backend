@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 from decouple import Csv, config
@@ -99,6 +100,14 @@ DATABASES = {
         'PORT': 5432,
     },
 }
+
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+    DATABASES['default']['NAME'] = 'github_actions'
+    DATABASES['default']['USER'] = 'postgres'
+    DATABASES['default']['PASSWORD'] = 'postgres'
+    DATABASES['default']['HOST'] = '127.0.0.1'
+    DATABASES['default']['PORT'] = 5432
 
 
 # Password validation
