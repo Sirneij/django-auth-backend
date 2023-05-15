@@ -45,5 +45,3 @@ jobs:
         run: chmod +x ./scripts/static_validation.sh && ./scripts/static_validation.sh
       - name: Run tests
         run: chmod +x ./scripts/test.sh && ./scripts/test.sh
-      - name: Coverage report
-        run: coverage-badge -o coverage.svg
