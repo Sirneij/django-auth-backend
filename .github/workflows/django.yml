@@ -1,4 +1,4 @@
-name: Django-auth=backend CI
+name: Django-auth-backend CI
 
 on:
   push:
