@@ -169,7 +169,7 @@ SESSION_COOKIE_HTTPONLY = True
 AUTH_USER_MODEL = 'users.User'
 
 # Celery
-CELERY_BROKER_URL = config('REDIS_URL', default='')
+CELERY_BROKER_URL = config('REDIS_URL', default='amqp://localhost')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
