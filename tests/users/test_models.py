@@ -1,9 +1,11 @@
+from tempfile import NamedTemporaryFile
+
 import pytest
 from django.test import TestCase
 from factory.django import DjangoModelFactory
 
 from django_auth.test_settings import common_settings
-from users.models import User, UserProfile
+from users.models import Articles, Series, User, UserProfile
 
 
 class UserFactory(DjangoModelFactory):
@@ -20,6 +22,23 @@ class UserProfileFactory(DjangoModelFactory):
     class Meta:
         model = UserProfile
         django_get_or_create = ('user',)
+
+
+class SeriesFactory(DjangoModelFactory):
+    name = 'Some title'
+    image = NamedTemporaryFile(suffix=".jpg").name
+
+    class Meta:
+        model = Series
+
+
+class ArticlesFactory(DjangoModelFactory):
+    title = 'Some article title'
+    url = 'https://dev.to/sirneij/authentication-system-using-python-django-and-sveltekit-23e1'
+
+    class Meta:
+        model = Articles
+        django_get_or_create = ('series',)
 
 
 @common_settings
@@ -68,3 +87,16 @@ class UserProfileModelTests(TestCase):
 
         with pytest.raises(TypeError, match='Superusers must have a password.'):
             User.objects.create_superuser(email='nelson@example.com', password=None)
+
+
+@common_settings
+class SeriesAndArticlesModelTests(TestCase):
+    def setUp(self):
+        """Test Setup."""
+        self.series = SeriesFactory.create()
+        self.articles = ArticlesFactory.create(series=self.series)
+
+    def test_str_representation(self):
+        """Test __str__ of series and articles."""
+        self.assertEqual(str(self.series), self.series.name)
+        self.assertEqual(str(self.articles), self.articles.title)

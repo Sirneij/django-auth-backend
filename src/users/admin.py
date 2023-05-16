@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from users.models import User, UserProfile
+from users.models import Articles, Series, User, UserProfile
 
 
 class CustomUserAdmin(UserAdmin):
@@ -41,3 +41,19 @@ class UserProfileAdmin(admin.ModelAdmin):  # type:ignore
     def user_email(self, obj: UserProfile) -> str:
         """Return the user's email."""
         return obj.user.email  # pragma: no cover
+
+
+@admin.register(Series)
+class SeriesAdmin(admin.ModelAdmin):  # type:ignore
+    list_display = ('id', 'name')
+    search_fields = ('name',)
+
+
+@admin.register(Articles)
+class ArticlesAdmin(admin.ModelAdmin):  # type:ignore
+    list_display = ('id', 'title', 'url', 'series_name')
+
+    @admin.display(ordering="user__email")
+    def series_name(self, obj: Articles) -> str:
+        """Return the series's name."""
+        return obj.series.name  # pragma: no cover

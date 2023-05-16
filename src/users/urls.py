@@ -8,6 +8,7 @@ from users.views import (
     profile_update,
     regenerate,
     register,
+    series,
 )
 from users.views.password import change_password, confirm_change_request, request_change
 
@@ -37,4 +38,6 @@ urlpatterns = [
     # User
     path('current-user/', current_user.CurrentUserView.as_view(), name='current_user'),
     path('update-user/', profile_update.UserUpdateView.as_view(), name='profile_update'),
+    # Series
+    path('series/', series.SeriesDataView.as_view(), name='series_data'),
 ]

@@ -104,8 +104,8 @@ DATABASES = {
 if os.environ.get('GITHUB_WORKFLOW'):
     DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
     DATABASES['default']['NAME'] = 'github_actions'
-    DATABASES['default']['USER'] = 'postgres'
-    DATABASES['default']['PASSWORD'] = 'postgres'
+    DATABASES['default']['USER'] = config('DB_USER', default='postgres')
+    DATABASES['default']['PASSWORD'] = config('DB_PASSWORD', default='postgres')
     DATABASES['default']['HOST'] = '127.0.0.1'
     DATABASES['default']['PORT'] = 5432
 
@@ -204,11 +204,20 @@ AWS_STORAGE_REGION = config('AWS_REGION', default='')
 AWS_DEFAULT_ACL = None
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_STORAGE_REGION}.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+# Media
 PUBLIC_MEDIA_LOCATION = 'media/users/django-auth'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
+# Static
+# s3 static settings
+STATIC_LOCATION = 'django-auth/static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+
 STORAGES = {
     'default': {
         'BACKEND': 'django_auth.storage_backends.PublicMediaStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'django_auth.storage_backends.StaticStorage',
     },
 }
 

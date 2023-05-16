@@ -75,3 +75,30 @@ def update_user_profile_signal(sender: Any, instance: User, created: bool, **kwa
     if created:
         UserProfile.objects.create(user=instance)
     instance.userprofile.save()
+
+
+class Series(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=20000)
+    image = models.ImageField(upload_to='series/')
+
+    class Meta:
+        verbose_name_plural = 'Series'
+
+    def __str__(self) -> str:
+        """Return a string representation of this model."""
+        return self.name
+
+
+class Articles(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=20000)
+    series = models.ForeignKey(Series, on_delete=models.CASCADE)
+    url = models.URLField()
+
+    class Meta:
+        verbose_name_plural = 'Articles'
+
+    def __str__(self) -> str:
+        """Return a string representation of this model."""
+        return self.title
