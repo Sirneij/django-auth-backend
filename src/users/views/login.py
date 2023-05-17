@@ -15,17 +15,14 @@ from users.models import UserProfile
 class LoginPageView(View):
     async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
         """Handle user logins."""
-        data = json.loads(request.body.decode("utf-8"))
+        data = json.loads(request.body.decode('utf-8'))
         email = data.get('email')
         password = data.get('password')
 
         if email is None or password is None:
             return JsonResponse({'error': 'Please provide email and password'}, status=400)
 
-        user = await sync_to_async(authenticate)(
-            email=data['email'],
-            password=data['password'],
-        )
+        user = await sync_to_async(authenticate)(email=email, password=password)
 
         if user is None:
             return JsonResponse({'error': 'Email and password do not match'}, status=400)
