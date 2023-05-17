@@ -45,3 +45,4 @@ traitlets==5.9.0
 urllib3==1.26.15
 vine==5.0.0
 wcwidth==0.2.6
+gunicorn==20.1.0

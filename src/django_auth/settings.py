@@ -93,11 +93,11 @@ WSGI_APPLICATION = 'django_auth.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_auth_backend_db',
-        'USER': 'quickcheck',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': config('DB_NAME', default='django_auth_backend_db'),
+        'USER': config('DB_USER', default='quickcheck'),
+        'PASSWORD': config('DB_PASSWORD', default='password'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default=5432, cast=int),
     },
 }
 
