@@ -93,6 +93,10 @@ WSGI_APPLICATION = 'django_auth.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'URL': config(
+            'DATABASE_URL',
+            default='postgres://quickcheck:password@localhost:5432/django_auth_backend_db',
+        ),
         'NAME': config('DB_NAME', default='django_auth_backend_db'),
         'USER': config('DB_USER', default='quickcheck'),
         'PASSWORD': config('DB_PASSWORD', default='password'),
