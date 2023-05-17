@@ -7,7 +7,7 @@
     },
     {
       "src": "build_files.sh",
-      "use": "@vercel/static-build"
+      "use": "@vercel/python"
     }
   ],
   "routes": [
