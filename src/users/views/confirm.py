@@ -9,7 +9,9 @@ from users.token import account_activation_token
 
 
 class ConfirmEmailView(View):
-    async def get(self, request: HttpRequest, uidb64: str, token: str) -> HttpResponseRedirect:
+    async def get(
+        self, request: HttpRequest, uidb64: str, token: str
+    ) -> HttpResponseRedirect:
         """Confirm and activate user emails and accounts."""
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))

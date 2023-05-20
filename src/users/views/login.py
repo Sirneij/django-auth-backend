@@ -13,23 +13,31 @@ from users.models import UserProfile
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginPageView(View):
-    async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+    async def post(
+        self, request: HttpRequest, **kwargs: dict[str, Any]
+    ) -> JsonResponse:
         """Handle user logins."""
         data = json.loads(request.body.decode('utf-8'))
         email = data.get('email')
         password = data.get('password')
 
         if email is None or password is None:
-            return JsonResponse({'error': 'Please provide email and password'}, status=400)
+            return JsonResponse(
+                {'error': 'Please provide email and password'}, status=400
+            )
 
         user = await sync_to_async(authenticate)(email=email, password=password)
 
         if user is None:
-            return JsonResponse({'error': 'Email and password do not match'}, status=400)
+            return JsonResponse(
+                {'error': 'Email and password do not match'}, status=400
+            )
 
         await sync_to_async(login)(request, user)
 
-        user_details = await UserProfile.objects.filter(user=user).select_related('user').aget()
+        user_details = (
+            await UserProfile.objects.filter(user=user).select_related('user').aget()
+        )
 
         res_data = {
             'id': str(user_details.user.pk),
@@ -39,13 +47,17 @@ class LoginPageView(View):
             'is_staff': user_details.user.is_staff,
             'is_active': user_details.user.is_active,
             'date_joined': str(user_details.user.date_joined),
-            'thumbnail': user_details.user.thumbnail.url if user_details.user.thumbnail else None,
+            'thumbnail': user_details.user.thumbnail.url
+            if user_details.user.thumbnail
+            else None,
             'profile': {
                 'id': str(user_details.id),
                 'user_id': str(user_details.user.pk),
                 'phone_number': user_details.phone_number,
                 'github_link': user_details.github_link,
-                'birth_date': str(user_details.birth_date) if user_details.birth_date else None,
+                'birth_date': str(user_details.birth_date)
+                if user_details.birth_date
+                else None,
             },
         }
 

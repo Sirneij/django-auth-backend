@@ -14,7 +14,9 @@ from users.token import account_activation_token
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ChangePasswordView(View):
-    async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+    async def post(
+        self, request: HttpRequest, **kwargs: dict[str, Any]
+    ) -> JsonResponse:
         """Change user password."""
         data = json.loads(request.body.decode("utf-8"))
         password = data.get('password')

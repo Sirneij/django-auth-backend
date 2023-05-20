@@ -42,7 +42,9 @@ class ChangePasswordViewTests(TestCase):
 
         data = {'password': 'SomeOther123456', 'token': f'{uid}:{token}'}
 
-        response = self.client.post(url, data=data, content_type='application/json', follow=True)
+        response = self.client.post(
+            url, data=data, content_type='application/json', follow=True
+        )
         self.assertEqual(
             response.json()['error'],
             'It appears that your password request token has expired or previously used',

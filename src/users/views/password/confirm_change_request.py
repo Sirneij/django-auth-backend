@@ -10,7 +10,9 @@ from users.token import account_activation_token
 
 
 class ConfirmPasswordChangeRequestView(View):
-    async def get(self, request: HttpRequest, uidb64: str, token: str) -> HttpResponseRedirect:
+    async def get(
+        self, request: HttpRequest, uidb64: str, token: str
+    ) -> HttpResponseRedirect:
         """Confirm password change requests."""
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
@@ -23,7 +25,9 @@ class ConfirmPasswordChangeRequestView(View):
             token = await sync_to_async(account_activation_token.make_token)(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             combined = f'{uid}:{token}'
-            return HttpResponseRedirect(f'{settings.FRONTEND_URL}/auth/password/change-password?token={combined}')
+            return HttpResponseRedirect(
+                f'{settings.FRONTEND_URL}/auth/password/change-password?token={combined}'
+            )
 
         return HttpResponseRedirect(
             f'{settings.FRONTEND_URL}/auth/regenerate-token?reason=It appears that '

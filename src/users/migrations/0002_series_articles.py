@@ -47,7 +47,9 @@ class Migration(migrations.Migration):
                 ("url", models.URLField()),
                 (
                     "series",
-                    models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="users.series"),
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="users.series"
+                    ),
                 ),
             ],
             options={

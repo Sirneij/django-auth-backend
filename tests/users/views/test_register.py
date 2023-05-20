@@ -34,7 +34,9 @@ class RegisterViewTests(TestCase):
 
     def test_register_failure_no_first_name(self):
         """Test when first_name is not present."""
-        response = self.client.post(path=self.url, data=self.data_no_first_name, content_type='application/json')
+        response = self.client.post(
+            path=self.url, data=self.data_no_first_name, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.json()['error'],
@@ -43,7 +45,9 @@ class RegisterViewTests(TestCase):
 
     def test_register_failure_invalid_email(self):
         """Test when email is not valid."""
-        response = self.client.post(path=self.url, data=self.data_invalid_email, content_type='application/json')
+        response = self.client.post(
+            path=self.url, data=self.data_invalid_email, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.json()['error'],
@@ -53,7 +57,9 @@ class RegisterViewTests(TestCase):
     def test_register_failure_user_exists(self):
         """Test when user with such email already exists."""
         UserFactory.create(email='john@example.com')
-        response = self.client.post(path=self.url, data=self.data_correct, content_type='application/json')
+        response = self.client.post(
+            path=self.url, data=self.data_correct, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.json()['error'],
@@ -62,8 +68,12 @@ class RegisterViewTests(TestCase):
 
     def test_register_success(self):
         """Test when user with such email already exists."""
-        with patch('users.views.register.send_email_message.delay') as send_email_message_to_user:
-            response = self.client.post(path=self.url, data=self.data_correct, content_type='application/json')
+        with patch(
+            'users.views.register.send_email_message.delay'
+        ) as send_email_message_to_user:
+            response = self.client.post(
+                path=self.url, data=self.data_correct, content_type='application/json'
+            )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(
             response.json()['message'],

@@ -22,7 +22,9 @@ from users.utils import validate_email
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
-    async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+    async def post(
+        self, request: HttpRequest, **kwargs: dict[str, Any]
+    ) -> JsonResponse:
         """Register users."""
         data = json.loads(request.body.decode('utf-8'))
         email = data.get('email')
@@ -33,7 +35,10 @@ class RegisterView(View):
         # Some validations
         if email is None or password is None or first_name is None or last_name is None:
             return JsonResponse(
-                {'error': 'All fields are required: email, first_name, last_name, password'}, status=400
+                {
+                    'error': 'All fields are required: email, first_name, last_name, password'
+                },
+                status=400,
             )
 
         is_valid, error_text = validate_email(email)
@@ -42,7 +47,9 @@ class RegisterView(View):
 
         user_exists = await get_user_model().objects.filter(email=email).aexists()
         if user_exists:
-            return JsonResponse({'error': 'A user with that email address already exists'}, status=400)
+            return JsonResponse(
+                {'error': 'A user with that email address already exists'}, status=400
+            )
 
         user = await sync_to_async(get_user_model().objects.create_user)(
             email=email,
@@ -67,10 +74,14 @@ class RegisterView(View):
             'title': "(Django) RustAuth - Let's get you verified",
             'domain': settings.FRONTEND_URL,
             'confirmation_link': confirmation_link,
-            'expiration_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).minute,
-            'exact_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).strftime(
-                '%A %B %d, %Y at %r'
-            ),
+            'expiration_time': (
+                timezone.localtime()
+                + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+            ).minute,
+            'exact_time': (
+                timezone.localtime()
+                + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+            ).strftime('%A %B %d, %Y at %r'),
         }
 
         send_email_message.delay(

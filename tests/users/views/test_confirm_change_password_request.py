@@ -21,10 +21,15 @@ class ConfirmPasswordChangeRequestViewTests(TestCase):
         token = account_activation_token.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.id))
 
-        url = reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})
+        url = reverse(
+            'users:confirm_password_change_request',
+            kwargs={'uidb64': uid, 'token': token},
+        )
 
         response = self.client.get(url, follow=True)
-        self.assertEqual(response.request['PATH_INFO'], '/auth/password/change-password')
+        self.assertEqual(
+            response.request['PATH_INFO'], '/auth/password/change-password'
+        )
 
     def test_confirm_password_change_request_failure(self):
         """Test when user is inactive."""
@@ -35,7 +40,10 @@ class ConfirmPasswordChangeRequestViewTests(TestCase):
         token = account_activation_token.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.id))
 
-        url = reverse('users:confirm_password_change_request', kwargs={'uidb64': uid, 'token': token})
+        url = reverse(
+            'users:confirm_password_change_request',
+            kwargs={'uidb64': uid, 'token': token},
+        )
 
         response = self.client.get(url, follow=True)
         self.assertEqual(response.request['PATH_INFO'], '/auth/regenerate-token')

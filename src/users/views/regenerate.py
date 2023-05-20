@@ -22,7 +22,9 @@ from users.utils import validate_email
 
 @method_decorator(csrf_exempt, name='dispatch')
 class RegenerateTokenView(View):
-    async def post(self, request: HttpRequest, **kwargs: dict[str, Any]) -> JsonResponse:
+    async def post(
+        self, request: HttpRequest, **kwargs: dict[str, Any]
+    ) -> JsonResponse:
         """Regenerate tokens to unverified users."""
         data = json.loads(request.body.decode("utf-8"))
         email = data.get('email')
@@ -36,7 +38,11 @@ class RegenerateTokenView(View):
             return JsonResponse({'error': error_text}, status=400)
 
         try:
-            user = await get_user_model().objects.filter(email=email, is_active=False).aget()
+            user = (
+                await get_user_model()
+                .objects.filter(email=email, is_active=False)
+                .aget()
+            )
         except get_user_model().DoesNotExist:
             return JsonResponse(
                 {
@@ -60,10 +66,14 @@ class RegenerateTokenView(View):
             'title': "(Django) RustAuth - Let's get you verified",
             'domain': settings.FRONTEND_URL,
             'confirmation_link': confirmation_link,
-            'expiration_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).minute,
-            'exact_time': (timezone.localtime() + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)).strftime(
-                '%A %B %d, %Y at %r'
-            ),
+            'expiration_time': (
+                timezone.localtime()
+                + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+            ).minute,
+            'exact_time': (
+                timezone.localtime()
+                + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+            ).strftime('%A %B %d, %Y at %r'),
         }
 
         send_email_message.delay(

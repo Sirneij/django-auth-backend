@@ -40,14 +40,18 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
         # User update
         data = {'first_name': 'Owolabi'}
         encoded_data = encode_multipart(BOUNDARY, data)
-        response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+        response = self.client.patch(
+            self.url, encoded_data, content_type=MULTIPART_CONTENT
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -62,14 +66,18 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
         # User update
         data = {'last_name': 'Idogun'}
         encoded_data = encode_multipart(BOUNDARY, data)
-        response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+        response = self.client.patch(
+            self.url, encoded_data, content_type=MULTIPART_CONTENT
+        )
 
         self.assertEqual(response.status_code, 200)
 
@@ -85,7 +93,9 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
@@ -96,7 +106,9 @@ class UserUpdateViewTests(TestCase):
                 f.seek(0)
                 data = {'thumbnail': f}
                 encoded_data = encode_multipart(BOUNDARY, data)
-                response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+                response = self.client.patch(
+                    self.url, encoded_data, content_type=MULTIPART_CONTENT
+                )
                 self.assertEqual(response.status_code, 200)
 
         user.refresh_from_db()
@@ -111,14 +123,18 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
         # User update
         data = {'phone_number': '+2348145359073'}
         encoded_data = encode_multipart(BOUNDARY, data)
-        response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+        response = self.client.patch(
+            self.url, encoded_data, content_type=MULTIPART_CONTENT
+        )
         self.assertEqual(response.status_code, 200)
 
         user.userprofile.refresh_from_db()
@@ -133,14 +149,18 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
         # User update
         data = {'birth_date': timezone.localdate()}
         encoded_data = encode_multipart(BOUNDARY, data)
-        response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+        response = self.client.patch(
+            self.url, encoded_data, content_type=MULTIPART_CONTENT
+        )
         self.assertEqual(response.status_code, 200)
 
         user.userprofile.refresh_from_db()
@@ -155,14 +175,18 @@ class UserUpdateViewTests(TestCase):
         user.save()
         url_login = reverse('users:login')
         login_data = {'email': user.email, 'password': '12345SomeData'}
-        response = self.client.post(path=url_login, data=login_data, content_type='application/json')
+        response = self.client.post(
+            path=url_login, data=login_data, content_type='application/json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['email'], user.email)
 
         # User update
         data = {'github_link': 'https://github.com/Sirneij'}
         encoded_data = encode_multipart(BOUNDARY, data)
-        response = self.client.patch(self.url, encoded_data, content_type=MULTIPART_CONTENT)
+        response = self.client.patch(
+            self.url, encoded_data, content_type=MULTIPART_CONTENT
+        )
         self.assertEqual(response.status_code, 200)
 
         user.userprofile.refresh_from_db()

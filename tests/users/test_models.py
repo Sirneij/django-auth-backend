@@ -26,7 +26,7 @@ class UserProfileFactory(DjangoModelFactory):
 
 class SeriesFactory(DjangoModelFactory):
     name = 'Some title'
-    image = NamedTemporaryFile(suffix=".jpg").name
+    image = NamedTemporaryFile(suffix='.jpg').name
 
     class Meta:
         model = Series
@@ -68,7 +68,9 @@ class UserProfileModelTests(TestCase):
 
     def test_create_user_success(self):
         """Test create_user method."""
-        user = User.objects.create_user(email='nelson@example.com', password='123456Data')
+        user = User.objects.create_user(
+            email='nelson@example.com', password='123456Data'
+        )
         self.assertEqual(user.email, 'nelson@example.com')
 
     def test_create_user_failure(self):
@@ -79,7 +81,9 @@ class UserProfileModelTests(TestCase):
 
     def test_create_super_user_success(self):
         """Test create_user method."""
-        user = User.objects.create_superuser(email='nelson@example.com', password='123456Data')
+        user = User.objects.create_superuser(
+            email='nelson@example.com', password='123456Data'
+        )
         self.assertEqual(user.email, 'nelson@example.com')
 
     def test_create_super_user_failure(self):

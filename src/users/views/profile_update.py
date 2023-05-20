@@ -18,10 +18,16 @@ class UserUpdateView(View, LoginRequiredMixin):
         """Handle user updates."""
         if not request.user.is_authenticated:
             return JsonResponse(
-                {'error': 'You are not logged in. Kindly ensure you are logged in and try again'}, status=401
+                {
+                    'error': 'You are not logged in. Kindly ensure you are logged in and try again'
+                },
+                status=401,
             )
         data, files = MultiPartParser(
-            request.META, BytesIO(request.body), request.upload_handlers, request.encoding
+            request.META,
+            BytesIO(request.body),
+            request.upload_handlers,
+            request.encoding,
         ).parse()
 
         first_name = data.get('first_name')
@@ -31,7 +37,9 @@ class UserUpdateView(View, LoginRequiredMixin):
         birth_date = data.get('birth_date')
         github_link = data.get('github_link')
 
-        user_details = UserProfile.objects.filter(user=request.user).select_related('user').get()
+        user_details = (
+            UserProfile.objects.filter(user=request.user).select_related('user').get()
+        )
         if first_name:
             user_details.user.first_name = first_name
 
@@ -62,13 +70,17 @@ class UserUpdateView(View, LoginRequiredMixin):
             'is_staff': user_details.user.is_staff,
             'is_active': user_details.user.is_active,
             'date_joined': str(user_details.user.date_joined),
-            'thumbnail': user_details.user.thumbnail.url if user_details.user.thumbnail else None,
+            'thumbnail': user_details.user.thumbnail.url
+            if user_details.user.thumbnail
+            else None,
             'profile': {
                 'id': str(user_details.id),
                 'user_id': str(user_details.user.pk),
                 'phone_number': user_details.phone_number,
                 'github_link': user_details.github_link,
-                'birth_date': str(user_details.birth_date) if user_details.birth_date else None,
+                'birth_date': str(user_details.birth_date)
+                if user_details.birth_date
+                else None,
             },
         }
 

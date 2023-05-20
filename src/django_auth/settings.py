@@ -23,7 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-zt$)wab#-u1)frduzwlq-)yqse^a%5guk7kq%^-h(v(xdlfm&h')
+SECRET_KEY = config(
+    'SECRET_KEY',
+    default='django-insecure-zt$)wab#-u1)frduzwlq-)yqse^a%5guk7kq%^-h(v(xdlfm&h',
+)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -206,7 +209,9 @@ AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='')
 AWS_STORAGE_BUCKET_NAME = config('AWS_S3_BUCKET_NAME', default='')
 AWS_STORAGE_REGION = config('AWS_REGION', default='')
 AWS_DEFAULT_ACL = None
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_STORAGE_REGION}.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = (
+    f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_STORAGE_REGION}.amazonaws.com'
+)
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 # Media
 PUBLIC_MEDIA_LOCATION = 'media/users/django-auth'

@@ -10,7 +10,9 @@ from django.dispatch import receiver
 class UserManager(BaseUserManager):  # type:ignore
     """UserManager class."""
 
-    def create_user(self, email: str, password: str, **extra_fields: dict[str, Any]) -> AbstractUser:
+    def create_user(
+        self, email: str, password: str, **extra_fields: dict[str, Any]
+    ) -> AbstractUser:
         """Create and save a User with the given email and password."""
         if not email:
             raise ValueError('The Email must be set')
@@ -20,7 +22,9 @@ class UserManager(BaseUserManager):  # type:ignore
         user.save()
         return user
 
-    def create_superuser(self, email: str, password: str, **extra_fields: dict[str, Any]) -> AbstractUser:
+    def create_superuser(
+        self, email: str, password: str, **extra_fields: dict[str, Any]
+    ) -> AbstractUser:
         """Create and return a `User` with superuser (admin) permissions."""
         if password is None:
             raise TypeError('Superusers must have a password.')
@@ -70,7 +74,9 @@ class UserProfile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def update_user_profile_signal(sender: Any, instance: User, created: bool, **kwargs: dict[str, Any]) -> None:
+def update_user_profile_signal(
+    sender: Any, instance: User, created: bool, **kwargs: dict[str, Any]
+) -> None:
     """Create or update UserProfile model after each user gets created or updated."""
     if created:
         UserProfile.objects.create(user=instance)

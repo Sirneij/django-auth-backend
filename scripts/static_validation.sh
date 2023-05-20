@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # checks whether or not the source files conform with black and isort formatting
-black --skip-string-normalization --line-length 120 --check tests
-black --skip-string-normalization --line-length 120 --check src
+black --skip-string-normalization --check tests
+black --skip-string-normalization --check src
 isort --atomic --profile black -c src
 isort --atomic --profile black -c tests
 
@@ -15,7 +15,7 @@ python manage.py makemigrations --check --dry-run
 prospector  --profile=../.prospector.yml --path=. --ignore-patterns=static
 
 # Analysis and checks whether or not we have common security issues in our Python code. 
-bandit -r .
+bandit -r . -ll
 
 # Checks for correct annotations
 mypy .

@@ -10,7 +10,9 @@ from django.utils.html import strip_tags
 
 
 @shared_task
-def send_email_message(subject: str, template_name: str, user_id: UUID, ctx: dict[str, Any]) -> None:
+def send_email_message(
+    subject: str, template_name: str, user_id: UUID, ctx: dict[str, Any]
+) -> None:
     """Send email to users."""
     html_message = render_to_string(template_name, ctx)
     plain_message = strip_tags(html_message)
